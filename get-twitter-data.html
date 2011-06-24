@@ -1,69 +1,1 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<title>Twitter List Member Fetcher</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-<script src="table2CSV.js"></script>
-<script>
-function get20TwitterUsers(cursor) { //
-	var url = 'http://api.twitter.com/1/lists/members.json?list_id=44875409';
-	if(cursor) {
-		url += '&cursor=' + cursor + '&callback=?';
-	} else {
-		url += '&callback=?';
-	}
-	$.getJSON(url, function(data){
-		renderUser(data.users);
-		if( data.next_cursor ) {
-			get20TwitterUsers(data.next_cursor)
-		}
-	});
-}
-
-function renderUser(data) {
-	
-	var output = '';
-	
-	var length = data.length;
-	for(var i = 0; i < length; i++) {
-		var name = data[i].name;
-		var description = data[i].description;
-		var screen_name = data[i].screen_name;
-		var location = data[i].location;
-		
-		output += '<tr>';
-		output += '<td>' + screen_name + '</td>';
-		output += '<td>' + name + '</td>';
-		output += '<td>' + description + '</td>';
-		output += '<td>' + location + '</td>';
-		output += '</tr>';
-	}
-	
-	$('#output').append(output);
-}
-
-$(function(){
-	$('#magic').click(function(e) {
-		e.preventDefault();
-		var csv = $('#output').table2CSV({delivery:'value'});
- 		$("#csv").val(csv);
-	});
-
-	//Kick off the magic
-	get20TwitterUsers(0);
-});
-</script>
-</head>
-<body>
-<table id="output">
-  <tr>
-    <th>screen_name</th>
-    <th>name</th>
-    <th>description</th>
-    <th>location</th>
-  </tr>
-</table>
-<textarea id="csv"></textarea>
-<a href="#sweetCSVMagic" id="magic">Make sweet CSV Magic!</a>
-</body>
-</html>
+<!DOCTYPE HTML><html><head><title>Twitter List Member Fetcher</title><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script><script src="table2CSV.js"></script><script>function get20TwitterUsers(cursor) { //	var url = 'http://api.twitter.com/1/lists/members.json?list_id=44875409'; //The attendee Twitter list	if(cursor) {		url += '&cursor=' + cursor + '&callback=?';	} else {		url += '&callback=?';	}	$.getJSON(url, function(data){		renderUser(data.users);		if( data.next_cursor ) {			get20TwitterUsers(data.next_cursor)		}	});}function renderUser(data) {		var output = '';		var length = data.length;	for(var i = 0; i < length; i++) {		var name = data[i].name;		var description = data[i].description;		var screen_name = data[i].screen_name;		var location = data[i].location;				output += '<tr>';		output += '<td>' + screen_name + '</td>';		output += '<td>' + name + '</td>';		output += '<td>' + description + '</td>';		output += '<td>' + location + '</td>';		output += '</tr>';	}		$('#output').append(output);}$(function(){	$('#magic').click(function(e) {		e.preventDefault();		var csv = $('#output').table2CSV({delivery:'value'}); 		$("#csv").val(csv);	});	//Kick off the magic	get20TwitterUsers(0);});</script></head><body><table id="output">  <tr>    <th>screen_name</th>    <th>name</th>    <th>description</th>    <th>location</th>  </tr></table><label>Sorry you have to copy and paste this into a .csv file to upload it to a Google FusionTable</label><textarea id="csv"></textarea><p><a href="#sweetCSVMagic" id="magic">Make sweet CSV Magic!</a></p></body></html>
